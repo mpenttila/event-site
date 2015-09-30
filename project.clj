@@ -1,0 +1,51 @@
+(defproject event-site "0.1.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
+  :min-lein-version "2.0.0"
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [org.clojure/clojurescript "1.7.122"]
+                 [com.stuartsierra/component "0.3.0"]
+                 [reagent "0.5.1"]
+                 [compojure "1.4.0"]
+                 [duct "0.4.2"]
+                 [meta-merge "0.1.1"]
+                 [ring "1.4.0"]
+                 [ring/ring-defaults "0.1.5"]
+                 [ring-jetty-component "0.3.0"]
+                 [duct/hikaricp-component "0.1.0"]
+                 [org.postgresql/postgresql "9.4-1203-jdbc4"]]
+  :plugins [[lein-scss "0.2.3" :exclusions [org.clojure/clojure]]]
+  :main ^:skip-aot event-site.main
+  :target-path "target/%s/"
+  :resource-paths ["resources" "target/cljsbuild"]
+  :cljsbuild {:builds {:dev {:source-paths ["src/cljs" "src/cljc"]
+                             :compiler {:main ui.app
+                                        :output-to "resources/public/main.js"
+                                        :asset-path "/out"}
+                             :figwheel { :on-jsload "ui.app/start" }}
+                       :prod {:source-paths ["src/cljs" "src/cljc"]
+                              :compiler {:main ui.app
+                                         :output-to "resources/public/main.js"
+                                         :optimizations :advanced
+                                         :closure-extra-annotations #{"api" "observable"}}}}}
+  :figwheel {:nrepl-port 7889
+             :server-port 3450
+             :css-dirs ["resources/public/css"]}
+  :uberjar-name "event-site.jar"
+  :source-paths ["src/clj" "src/cljc"]
+  :repl-options {:init-ns user}
+  :clean-targets ^{:protect false} ["resources/public/main.js"
+                                    "resources/public/out"
+                                    :target-path]
+  :profiles {:uberjar {:aot :all
+                       :prep-tasks ^:replace ["clean"
+                                              ["scss" ":prod" "once"]
+                                              ["cljsbuild" "once" "prod"]
+                                              "javac"
+                                              "compile"]}
+             :dev {:source-paths ["dev"]
+                   :dependencies [[reloaded.repl "0.2.0"]
+                                  [org.clojure/tools.nrepl "0.2.11"]]
+                   :plugins [[lein-cljsbuild "1.1.0"]
+                             [lein-figwheel "0.4.0" :exclusions [org.clojure/clojure
+                                                                 org.clojure/clojure org.codehaus.plexus/plexus-utils]]]}})
