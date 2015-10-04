@@ -35,6 +35,7 @@
                          "public/index.html")]
         (-> (resource-response index-file)
             (content-type "text/html"))))
+    (GET "/css/main.css" [] (resource-response "public/css/main.css"))
     (POST "/login" {{password :password} :params}
       (cond-> (redirect "/" :see-other)
               (valid-password? password) (assoc-in [:session :authorized] true)))
