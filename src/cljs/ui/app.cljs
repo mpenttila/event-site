@@ -1,5 +1,6 @@
 (ns ui.app
-  (:require [reagent.core :as reagent]
+  (:require [ui.utils :as utils]
+            [reagent.core :as reagent]
             [goog.events :as events]
             [goog.events.EventType :as EventType]))
 
@@ -20,6 +21,25 @@
                                   id (.-id node)]
                               (swap! offsets assoc id {:top top :bottom bottom})))}))
 
+(defn handle-link-click [id e]
+  (.preventDefault e)
+  (let [{:keys [top]} (get @offsets id)
+        scroll-y (.-scrollY js/window)
+        diff (- top scroll-y)
+        duration 1201.0
+        epsilon (/ 1000 60 duration 4)
+        ease-fn (utils/bezier 0.25 1 0.25 1 epsilon)]
+
+    (.requestAnimationFrame js/window (fn [start]
+                                        (letfn [(animate-frame [ts] (let [dt (- ts start)
+                                                                          progress (* 1.05 (/ dt duration))
+                                                                          bezier-term (ease-fn progress)
+                                                                          position (+ scroll-y (Math/round (* bezier-term diff)))]
+                                                                      (.scrollTo js/window 0 position)
+                                                                      (when-not (= position top)
+                                                                        (.requestAnimationFrame js/window animate-frame))))]
+                                          (animate-frame start))))))
+
 (def main-view
   (with-meta
     (fn []
@@ -33,7 +53,8 @@
                 (let [{:keys [top bottom]} (get @offsets id)]
                     ^{:key (str id "-link")} [:li
                                               [:a {:href (str "#" id)
-                                                   :class (when (and (>= scroll-y top) (< scroll-y bottom)) "active")}
+                                                   :class (when (and (>= scroll-y top) (< scroll-y bottom)) "active")
+                                                   :on-click (partial handle-link-click id)}
                                                id]])))]]]
          [:div.content
           (doall
