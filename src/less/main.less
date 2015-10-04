@@ -10,10 +10,6 @@ body, html, #app, .app-container, .content {
   height: 75px;
   position: fixed;
   background-color: rgba(0, 47, 180, 0.6);
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 
 .menu {
@@ -31,9 +27,11 @@ body, html, #app, .app-container, .content {
   margin: 0 30px 0 0;
   display: inline;
 }
+
 .active {
   color: yellow;
 }
+
 a {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -41,25 +39,33 @@ a {
   text-decoration: none;
   line-height: 50px;
 }
-#home {
-  background-color: grey;
+
+.content-section {
   height: 100%;
   width: 100%;
+  background-color: grey;
   overflow: hidden;
+  padding: 80px 60px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: white;
+
+  h1 {
+    font-size: 36pt;
+  }
+}
+
+#home {
   background-image: url("http://lorempixel.com/1600/800");
 }
-#portfolio {
+
+#work {
   background-image: url("http://lorempixel.com/1600/900");
-  height: 100%;
-  width: 100%;
 }
+
 #about {
-  background-color: blue;
-  height: 100%;
-  width: 100%;
+  background-color: #db96ff;
 }
+
 #contact {
-  background-color: red;
-  height: 100%;
-  width: 100%;
+  background-color: #4f0322;
 }
