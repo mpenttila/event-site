@@ -61,10 +61,12 @@
               (doall
                 (for [[idk _] content]
                   (let [id (name idk)
-                        {:keys [top bottom]} (get @offsets id)]
+                        {:keys [top bottom]} (get @offsets id)
+                        active? (and (>= scroll-y (- top 10))
+                                     (< scroll-y (- bottom 11)))]
                     ^{:key (str id "-link")} [:li
                                               [:a {:href (str "#" id)
-                                                   :class (when (and (>= scroll-y top) (< scroll-y bottom)) "active")
+                                                   :class (when active? "active")
                                                    :on-click (partial handle-link-click id)}
                                                (link-text id)]])))]]]
            [:div.content
