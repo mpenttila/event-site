@@ -57,6 +57,7 @@ html,
   height: 100%;
   width: 100%;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
 }
 .login-page {
   background-color: #e2f3ff;
@@ -98,9 +99,11 @@ html,
   width: 980px;
   height: 75px;
   margin: 0 auto;
+  font-size: 20px;
 }
 .menu ul {
   margin: 15px 0 0 0;
+  padding: 0;
 }
 .menu ul li {
   list-style: none;
@@ -108,10 +111,9 @@ html,
   display: inline;
 }
 .active {
-  color: yellow;
+  font-weight: bold;
 }
 a {
-  font-size: 14px;
   color: #fff;
   text-decoration: none;
   line-height: 50px;
@@ -121,11 +123,16 @@ a {
   width: 100%;
   background-color: grey;
   overflow: hidden;
-  padding: 80px 60px;
+  padding: 80px 0;
   color: white;
+}
+.content-section .markup-container {
+  width: 980px;
+  margin: 0 auto;
 }
 .content-section h1 {
   font-size: 36pt;
+  font-weight: 300;
 }
 #home {
   background-image: url("http://lorempixel.com/1600/800");

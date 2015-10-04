@@ -18,7 +18,8 @@
   (with-meta
     (fn [id markup]
       [:div.content-section {:id id}
-       markup])
+       [:div.markup-container
+        markup]])
     {:component-did-mount (fn [this]
                             (let [node (reagent/dom-node this)
                                   top (.-offsetTop node)
