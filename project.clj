@@ -14,7 +14,7 @@
                  [ring-jetty-component "0.3.0"]
                  [duct/hikaricp-component "0.1.0"]
                  [org.postgresql/postgresql "9.4-1203-jdbc4"]]
-  :plugins [[lein-scss "0.2.3" :exclusions [org.clojure/clojure]]]
+  :plugins [[lein-less "1.7.5"]]
   :main ^:skip-aot event-site.main
   :target-path "target/%s/"
   :resource-paths ["resources" "target/cljsbuild"]
@@ -37,9 +37,11 @@
   :clean-targets ^{:protect false} ["resources/private/main.js"
                                     "resources/private/out"
                                     :target-path]
+  :less {:source-paths ["src/less"]
+         :target-path "resources/public/css"}
   :profiles {:uberjar {:aot :all
                        :prep-tasks ^:replace ["clean"
-                                              ["scss" ":prod" "once"]
+                                              ["less" "once"]
                                               ["cljsbuild" "once" "prod"]
                                               "javac"
                                               "compile"]}
