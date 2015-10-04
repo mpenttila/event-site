@@ -6,14 +6,28 @@
             [duct.middleware.not-found :refer [wrap-not-found]]
             [meta-merge.core :refer [meta-merge]]
             [ring.component.jetty :refer [jetty-server]]
-            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [event-site.endpoint.resources :refer [resources]]))
 
 (def base-config
   {:app {:middleware [[wrap-not-found :not-found]
                       [wrap-defaults :defaults]]
          :not-found  "Resource Not Found"
-         :defaults   (meta-merge api-defaults {})}})
+         :defaults   {:params    {:urlencoded true
+                                  :multipart  true
+                                  :nested     true
+                                  :keywordize true}
+                      :cookies   true
+                      :session   {:flash true
+                                  :cookie-attrs {:http-only true}}
+                      :security  {:anti-forgery   false
+                                  :xss-protection {:enable? true, :mode :block}
+                                  :frame-options  :sameorigin
+                                  :content-type-options :nosniff}
+                      :responses {:not-modified-responses false
+                                  :absolute-redirects     true
+                                  :content-types          true
+                                  :default-charset        "utf-8"}}}})
 
 (defn new-system [config]
   (let [config (meta-merge base-config config)]

@@ -20,12 +20,12 @@
   :resource-paths ["resources" "target/cljsbuild"]
   :cljsbuild {:builds {:dev {:source-paths ["src/cljs" "src/cljc"]
                              :compiler {:main ui.app
-                                        :output-to "resources/public/main.js"
+                                        :output-to "resources/private/main.js"
                                         :asset-path "/out"}
                              :figwheel { :on-jsload "ui.app/start" }}
                        :prod {:source-paths ["src/cljs" "src/cljc"]
                               :compiler {:main ui.app
-                                         :output-to "resources/public/main.js"
+                                         :output-to "resources/private/main.js"
                                          :optimizations :advanced
                                          :closure-extra-annotations #{"api" "observable"}}}}}
   :figwheel {:nrepl-port 7889
@@ -34,8 +34,8 @@
   :uberjar-name "event-site.jar"
   :source-paths ["src/clj" "src/cljc"]
   :repl-options {:init-ns user}
-  :clean-targets ^{:protect false} ["resources/public/main.js"
-                                    "resources/public/out"
+  :clean-targets ^{:protect false} ["resources/private/main.js"
+                                    "resources/private/out"
                                     :target-path]
   :profiles {:uberjar {:aot :all
                        :prep-tasks ^:replace ["clean"

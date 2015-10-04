@@ -12,5 +12,6 @@ dev/local.clj
 .idea
 *.iml
 figwheel_server.log
-resources/public/out
-resources/public/main.js
+resources/private/out
+resources/private/main.js
+
