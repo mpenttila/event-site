@@ -62,13 +62,14 @@
                 (for [[idk _] content]
                   (let [id (name idk)
                         {:keys [top bottom]} (get @offsets id)
-                        active? (and (>= scroll-y (- top 10))
-                                     (< scroll-y (- bottom 11)))]
-                    ^{:key (str id "-link")} [:li
-                                              [:a {:href (str "#" id)
-                                                   :class (when active? "active")
-                                                   :on-click (partial handle-link-click id)}
-                                               (link-text id)]])))]]]
+                        active? (and (>= scroll-y (- top 40))
+                                     (< scroll-y (- bottom 41)))]
+                    ^{:key (str id "-link")}
+                    [:li
+                     [:a {:href (str "#" id)
+                          :class (when active? "active")
+                          :on-click (partial handle-link-click id)}
+                      (link-text id)]])))]]]
            [:div.content
             (doall
               (for [[id markup] content]
