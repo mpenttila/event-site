@@ -2,12 +2,13 @@
   (:require [com.stuartsierra.component :as component]
             [duct.component.endpoint :refer [endpoint-component]]
             [duct.component.handler :refer [handler-component]]
-            [duct.component.hikaricp :refer [hikaricp]]
             [duct.middleware.not-found :refer [wrap-not-found]]
             [meta-merge.core :refer [meta-merge]]
             [ring.component.jetty :refer [jetty-server]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [event-site.endpoint.resources :refer [resources]]))
+            [event-site.component.db :refer [connect-db]]
+            [event-site.endpoint.resources :refer [resources]]
+            [event-site.endpoint.persistence :refer [persistence-routes]]))
 
 (def base-config
   {:app {:middleware [[wrap-not-found :not-found]
@@ -34,9 +35,11 @@
     (-> (component/system-map
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
-         ;:db   (hikaricp (:db config))
-         :resources (endpoint-component resources))
+         :mongo (connect-db (:db config))
+         :resources (endpoint-component resources)
+         :persistence (endpoint-component persistence-routes))
         (component/system-using
          {:http [:app]
-          :app  [:resources]
+          :app  [:resources :persistence]
+          :persistence [:mongo]
           :resources []}))))

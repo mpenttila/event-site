@@ -12,8 +12,8 @@
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.1.5"]
                  [ring-jetty-component "0.3.0"]
-                 [duct/hikaricp-component "0.1.0"]
-                 [org.postgresql/postgresql "9.4-1203-jdbc4"]]
+                 [com.novemberain/monger "3.0.1"]
+                 [prismatic/schema "1.0.1"]]
   :plugins [[lein-less "1.7.5"]]
   :main ^:skip-aot event-site.main
   :target-path "target/%s/"
