@@ -3,7 +3,9 @@
             [ui.content.example :as example]
             [reagent.core :as reagent]
             [goog.events :as events]
-            [goog.events.EventType :as EventType]))
+            [goog.events.EventType :as EventType]
+            [clojure.walk :as walk]
+            [ui.component.register-form :as register-form]))
 
 (def cur-scroll-y (reagent/atom 0))
 
@@ -14,12 +16,19 @@
 (defn load-content [content-vec]
   (reset! content-ratom content-vec))
 
+(defn render-components [markup]
+  (walk/postwalk
+    (fn [form]
+      (cond
+        (= :register-form form) register-form/form-component
+        :else form)) markup))
+
 (def content-section
   (with-meta
     (fn [id markup]
       [:div.content-section {:id id}
        [:div.markup-container
-        markup]])
+        (render-components markup)]])
     {:component-did-mount (fn [this]
                             (let [node (reagent/dom-node this)
                                   top (.-offsetTop node)

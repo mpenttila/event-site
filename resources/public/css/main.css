@@ -47,6 +47,13 @@
   content: '\e802';
 }
 /* '' */
+.register-form {
+  color: black;
+  max-width: 600px;
+}
+.register-form .input-fields input {
+  margin-bottom: 8px;
+}
 body,
 html,
 #app,

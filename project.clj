@@ -13,7 +13,10 @@
                  [ring/ring-defaults "0.1.5"]
                  [ring-jetty-component "0.3.0"]
                  [com.novemberain/monger "3.0.1"]
-                 [prismatic/schema "1.0.1"]]
+                 [prismatic/plumbing "0.5.0"]
+                 [prismatic/schema "1.0.1"]
+                 [ring-transit "0.1.3"]
+                 [cljs-ajax "0.5.0"]]
   :plugins [[lein-less "1.7.5"]]
   :main ^:skip-aot event-site.main
   :target-path "target/%s/"

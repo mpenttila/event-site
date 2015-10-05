@@ -35,11 +35,11 @@
     (-> (component/system-map
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
-         :mongo (connect-db (:db config))
+         :db (connect-db (:db config))
          :resources (endpoint-component resources)
          :persistence (endpoint-component persistence-routes))
         (component/system-using
          {:http [:app]
           :app  [:resources :persistence]
-          :persistence [:mongo]
+          :persistence [:db]
           :resources []}))))

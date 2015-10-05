@@ -2,9 +2,10 @@
 
 (def pages [[:home [:div
                     [:h1 "Welcome to my event!"]]]
-            [:work [:div
-                    [:h1 "Some of my work"]]]
+            [:register [:div
+                        [:h1 "Register"]
+                        [:register-form]]]
             [:about [:div
-                     [:h1 "This is me"]]]
+                     [:h1 "About me"]]]
             [:contact [:div
                        [:h1 "How to reach me"]]]])
