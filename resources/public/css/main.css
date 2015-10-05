@@ -96,7 +96,8 @@ html,
   background-color: rgba(0, 47, 180, 0.6);
 }
 .menu {
-  width: 980px;
+  width: 90%;
+  max-width: 980px;
   height: 75px;
   margin: 0 auto;
   font-size: 20px;
@@ -127,7 +128,8 @@ a {
   color: white;
 }
 .content-section .markup-container {
-  width: 980px;
+  width: 90%;
+  max-width: 980px;
   margin: 0 auto;
 }
 .content-section h1 {
