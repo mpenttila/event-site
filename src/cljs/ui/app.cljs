@@ -1,6 +1,6 @@
 (ns ui.app
   (:require [ui.utils :as utils]
-            [ui.content.example :as example]
+            [ui.content.example.content :refer [pages]]
             [reagent.core :as reagent]
             [goog.events :as events]
             [goog.events.EventType :as EventType]
@@ -88,5 +88,5 @@
 
 (defn ^:export start []
   (enable-console-print!)
-  (load-content example/pages)
+  (load-content pages)
   (reagent/render-component [main-view] (.getElementById js/document "app")))

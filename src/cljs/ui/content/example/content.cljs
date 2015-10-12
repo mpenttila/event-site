@@ -1,4 +1,4 @@
-(ns ui.content.example)
+(ns ui.content.example.content)
 
 (def pages [{:id "home"
              :style {:background-image "url('http://lorempixel.com/1600/800')"}
