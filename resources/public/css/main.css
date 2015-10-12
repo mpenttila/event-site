@@ -133,6 +133,7 @@ a {
   overflow: hidden;
   padding: 80px 0;
   color: white;
+  background-size: cover;
 }
 .content-section .markup-container {
   width: 90%;
@@ -143,15 +144,13 @@ a {
   font-size: 36pt;
   font-weight: 300;
 }
-#home {
-  background-image: url("http://lorempixel.com/1600/800");
+@media screen and (max-device-width: 800px) {
+  .content-section {
+    background-position: -250px 0;
+  }
 }
-#work {
-  background-image: url("http://lorempixel.com/1600/900");
-}
-#about {
-  background-color: #db96ff;
-}
-#contact {
-  background-color: #4f0322;
+@media screen and (max-width: 800px) {
+  .content-section {
+    background-position: -250px 0;
+  }
 }

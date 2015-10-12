@@ -25,8 +25,8 @@
 
 (def content-section
   (with-meta
-    (fn [id markup]
-      [:div.content-section {:id id}
+    (fn [{:keys [id markup style]}]
+      [:div.content-section {:id id :style style}
        [:div.markup-container
         (render-components markup)]])
     {:component-did-mount (fn [this]
@@ -68,9 +68,8 @@
             [:nav.menu
              [:ul
               (doall
-                (for [[idk _] content]
-                  (let [id (name idk)
-                        {:keys [top bottom]} (get @offsets id)
+                (for [{:keys [id]} content]
+                  (let [{:keys [top bottom]} (get @offsets id)
                         active? (and (>= scroll-y (- top 40))
                                      (< scroll-y (- bottom 41)))]
                     ^{:key (str id "-link")}
@@ -81,9 +80,9 @@
                       (link-text id)]])))]]]
            [:div.content
             (doall
-              (for [[id markup] content]
-                ^{:key (name id)} [content-section (name id) markup]))]])))
-    {:component-did-mount (fn [this]
+              (for [{:keys [id] :as page} content]
+                ^{:key id} [content-section page]))]])))
+    {:component-did-mount (fn [_]
                             (events/listen js/window EventType/SCROLL
                                            (fn [e] (reset! cur-scroll-y (.-scrollY js/window)))))}))
 
