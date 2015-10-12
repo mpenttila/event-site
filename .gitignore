@@ -14,4 +14,5 @@ dev/local.clj
 figwheel_server.log
 resources/private/out
 resources/private/main.js
+deploy.sh
 

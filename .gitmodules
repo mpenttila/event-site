@@ -1,0 +1,3 @@
+[submodule "src/cljs/ui/content/karonkka"]
+	path = src/cljs/ui/content/karonkka
+	url = wox:/srv/git/karonkka.git
