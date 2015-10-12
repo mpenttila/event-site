@@ -1,3 +1,4 @@
 {:http {:port 3000}
  :logging {:file "event-site.log"}
- :db {:uri "mongodb://localhost/event-site"}}
+ :db {:uri "mongodb://localhost/event-site"}
+ :security {:common-password "testi"}}

@@ -37,9 +37,10 @@
          :http (jetty-server (:http config))
          :db (connect-db (:db config))
          :resources (endpoint-component resources)
-         :persistence (endpoint-component persistence-routes))
+         :persistence (endpoint-component persistence-routes)
+         :security (:security config))
         (component/system-using
          {:http [:app]
           :app  [:resources :persistence]
           :persistence [:db]
-          :resources []}))))
+          :resources [:security]}))))

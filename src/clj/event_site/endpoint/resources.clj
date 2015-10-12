@@ -16,9 +16,6 @@
 (defn authorized? [request]
   (get-in request [:session :authorized]))
 
-(defn valid-password? [password]
-  (= "testi" password))
-
 (defn wrap-authorization [handler]
   (fn [request]
     (if (authorized? request)
@@ -27,7 +24,7 @@
           (assoc response :session (or (:session response) (:session request)))))
       (unauthorized-response))))
 
-(defn resources [_]
+(defn resources [{{:keys [common-password]} :security}]
   (routes
     (GET "/" request
       (let [index-file (if (authorized? request)
@@ -37,7 +34,7 @@
             (content-type "text/html"))))
     (POST "/login" {{password :password} :params}
       (cond-> (redirect "/" :see-other)
-              (valid-password? password) (assoc-in [:session :authorized] true)))
+              (= common-password password)  (assoc-in [:session :authorized] true)))
     (route/resources "/" {:root "public"})
     (-> (route/resources "/" {:root "private"})
         (wrap-authorization))))
