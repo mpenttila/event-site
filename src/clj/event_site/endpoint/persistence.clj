@@ -9,17 +9,14 @@
 
 (def collection "registrations")
 
-(defn send-confirmation-email [email]
-  (postal/send-message {:from "info@domain.local"
-                        :to email
-                        :subject "Thank you and welcome!"
-                        :body "Test."}))
+(defn send-confirmation-email [to-addr email-config]
+  (postal/send-message (assoc email-config :to to-addr)))
 
-(defn store-registration [db data]
+(defn store-registration [db data email-config]
   (let [data-with-ts (assoc data :created (Date.))]
     (domain/validate data-with-ts)
     (mc/insert db collection data-with-ts)
-    (send-confirmation-email (:email data))))
+    (send-confirmation-email (:email data) email-config)))
 
 (defn get-registrations [db]
   (q/with-collection db collection
@@ -31,7 +28,7 @@
     (when (= password admin-password)
       password)))
 
-(defn persistence-routes [{{{db :db} :mongo} :db {:keys [admin-password]} :security}]
+(defn persistence-routes [{{{db :db} :mongo} :db {:keys [admin-password]} :security email-config :email}]
   (routes
     (-> (routes (GET "/registrations" request
                   (if-let [verified-password (verify-password request admin-password)]
@@ -53,7 +50,7 @@
     (-> (POST "/register" {:keys [body session]}
           (try
             (let [reg-data (select-keys body [:name :email :food :other])]
-              (store-registration db reg-data)
+              (store-registration db reg-data email-config)
               {:status 200
                :body "Registration saved"
                :session (merge session {:registration reg-data})})

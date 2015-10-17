@@ -42,9 +42,10 @@
          :db (connect-db (:db config))
          :resources (endpoint-component resources)
          :persistence (endpoint-component persistence-routes)
-         :security (:security config))
+         :security (:security config)
+         :email (:email config))
         (component/system-using
          {:http [:app]
           :app  [:resources :persistence]
-          :persistence [:db :security]
+          :persistence [:db :security :email]
           :resources [:security]}))))

@@ -3,4 +3,7 @@
  :db {:uri "mongodb://localhost/event-site"}
  :security {:common-password "testi"
             :admin-password "salaisuus"
-            :cookie-secret "changeitchangeit"}}
+            :cookie-secret "changeitchangeit"}
+ :email {:from "info@domain.local"
+         :subject "Thank you and welcome!"
+         :body "Test."}}
