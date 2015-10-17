@@ -16,7 +16,8 @@
                  [prismatic/plumbing "0.5.0"]
                  [prismatic/schema "1.0.1"]
                  [ring-transit "0.1.3"]
-                 [cljs-ajax "0.5.0"]]
+                 [cljs-ajax "0.5.0"]
+                 [com.draines/postal "1.11.3"]]
   :plugins [[lein-less "1.7.5"]]
   :main ^:skip-aot event-site.main
   :target-path "target/%s/"

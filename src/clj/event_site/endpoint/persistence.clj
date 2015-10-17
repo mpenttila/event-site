@@ -3,15 +3,23 @@
             [event-site.domain :as domain]
             [compojure.core :refer :all]
             [ring.middleware.transit :refer [wrap-transit-body wrap-transit-response]]
-            [monger.query :as q])
+            [monger.query :as q]
+            [postal.core :as postal])
   (:import (java.util Date)))
 
 (def collection "registrations")
 
+(defn send-confirmation-email [email]
+  (postal/send-message {:from "info@domain.local"
+                        :to email
+                        :subject "Thank you and welcome!"
+                        :body "Test."}))
+
 (defn store-registration [db data]
   (let [data-with-ts (assoc data :created (Date.))]
     (domain/validate data-with-ts)
-    (mc/insert db collection data-with-ts)))
+    (mc/insert db collection data-with-ts)
+    (send-confirmation-email (:email data))))
 
 (defn get-registrations [db]
   (q/with-collection db collection
