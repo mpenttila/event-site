@@ -9,11 +9,12 @@
   (let [current-url (-> js/window .-location .-href)
         admin-view? (> (.indexOf current-url "/admin") 0)]
     (if admin-view?
-      (do (state/get-registrations)
+      (do (state/get-registrations nil)
           [admin-view])
       [main-view])))
 
 (defn ^:export start []
   (enable-console-print!)
   (state/load-content pages)
+  (state/load-previous-data)
   (reagent/render-component [app-root] (.getElementById js/document "app")))

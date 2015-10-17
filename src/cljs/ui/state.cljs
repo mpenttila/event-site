@@ -7,6 +7,8 @@
 (def registrations (reagent/atom {:list []
                                   :authorized? false}))
 
+(def registration-data (reagent/atom {}))
+
 (defn load-content [content-vec]
   (reset! content-ratom content-vec))
 
@@ -17,3 +19,7 @@
         :error-handler (fn [{:keys [status]}]
                          (when (= 401 status)
                            #(swap! registrations assoc :authorized? false)))}))
+
+(defn load-previous-data []
+  (GET "/registration-data"
+       {:handler #(reset! registration-data %)}))

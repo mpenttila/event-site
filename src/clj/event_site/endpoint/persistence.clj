@@ -33,22 +33,30 @@
 
 (defn persistence-routes [{{{db :db} :mongo} :db {:keys [admin-password]} :security}]
   (routes
-    (-> (GET "/registrations" request
-          (if-let [verified-password (verify-password request admin-password)]
-            (let [regs (->> (get-registrations db)
+    (-> (routes (GET "/registrations" request
+                  (if-let [verified-password (verify-password request admin-password)]
+                    (let [regs (->> (get-registrations db)
                             (map #(dissoc % :_id)))]
-              {:status 200
-               :body regs
-               :session (assoc (:session request) :admin-password verified-password)})
-            {:status 403
-             :headers {"Content-Type" "text/plain; charset=utf-8"}
-             :body "Sinulla ei ole tarvittavia käyttöoikeuksia"}))
+                      {:status 200
+                       :body regs
+                       :session (assoc (:session request) :admin-password verified-password)})
+                    {:status 403
+                     :headers {"Content-Type" "text/plain; charset=utf-8"}
+                     :body "Sinulla ei ole tarvittavia käyttöoikeuksia"}))
+                (GET "/registration-data" {{:keys [registration]} :session}
+                  (if registration
+                    {:status 200
+                     :body registration}
+                    {:status 404
+                     :body "No registration data"})))
         (wrap-transit-response))
-    (-> (POST "/register" {:keys [body]}
+    (-> (POST "/register" {:keys [body session]}
           (try
-            (store-registration db (select-keys body [:name :email :food :other]))
-            {:status 200
-             :body "Registration saved"}
+            (let [reg-data (select-keys body [:name :email :food :other])]
+              (store-registration db reg-data)
+              {:status 200
+               :body "Registration saved"
+               :session (merge session {:registration reg-data})})
             (catch Throwable e
               {:status 400
                :body "Bad request"})))
