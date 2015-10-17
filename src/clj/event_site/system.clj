@@ -8,7 +8,8 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [event-site.component.db :refer [connect-db]]
             [event-site.endpoint.resources :refer [resources]]
-            [event-site.endpoint.persistence :refer [persistence-routes]]))
+            [event-site.endpoint.persistence :refer [persistence-routes]]
+            [ring.middleware.session.cookie :as rmsc]))
 
 (def base-config
   {:app {:middleware [[wrap-not-found :not-found]
@@ -31,7 +32,10 @@
                                   :default-charset        "utf-8"}}}})
 
 (defn new-system [config]
-  (let [config (meta-merge base-config config)]
+  (let [cookie-secret (get-in config [:security :cookie-secret])
+        config (-> base-config
+                   (meta-merge {:app {:defaults {:session {:store (rmsc/cookie-store {:key cookie-secret})}}}})
+                   (meta-merge config))]
     (-> (component/system-map
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
