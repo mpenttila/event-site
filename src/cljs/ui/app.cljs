@@ -13,6 +13,8 @@
 
 (def content-ratom (reagent/atom []))
 
+(def content-nodes (reagent/atom {}))
+
 (defn load-content [content-vec]
   (reset! content-ratom content-vec))
 
@@ -34,11 +36,14 @@
                                   top (.-offsetTop node)
                                   bottom (+ (.-offsetHeight node) top)
                                   id (.-id node)]
-                              (swap! offsets assoc id {:top top :bottom bottom})))}))
+                              (swap! offsets assoc id {:top top :bottom bottom})
+                              (swap! content-nodes assoc id node)))}))
 
 (defn handle-link-click [id e]
   (.preventDefault e)
-  (let [{:keys [top]} (get @offsets id)
+  (let [
+        ;{:keys [top]} (get @offsets id)
+        top (.-offsetTop (get @content-nodes id))
         scroll-y (.-scrollY js/window)
         diff (- top scroll-y)
         duration 1201.0
@@ -66,7 +71,10 @@
           (when (seq content)
             (let [menu-links (doall
                                (for [{:keys [id]} content]
-                                 (let [{:keys [top bottom]} (get @offsets id)
+                                 (let [node (get @content-nodes id)
+                                       top (when node (.-offsetTop node))
+                                       bottom (when node (+ (.-offsetHeight node) top))
+                                       ;{:keys [top bottom]} (get @offsets id)
                                        active? (and (>= scroll-y (- top 40))
                                                     (< scroll-y (- bottom 41)))]
                                    ^{:key (str id "-link")}
@@ -81,8 +89,12 @@
                [:div.menu-wrapper
                 [:nav.menu
                  [:div.mobile
-                  [:i.icon-menu {:on-click (fn [_] (swap! drawer-open? not)
-                                             true)}]
+                  [:a {:on-click (fn [e]
+                                   (.preventDefault e)
+                                   (swap! drawer-open? not)
+                                   nil)
+                       :href "#"}
+                   [:i.icon-menu]]
                   (when @drawer-open?
                     [:div.menu-drawer
                      [:ul menu-links]])]
