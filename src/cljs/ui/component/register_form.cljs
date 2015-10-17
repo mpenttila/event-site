@@ -44,4 +44,10 @@
            [:div
             [:button {:type "submit" :disabled (not @valid?)} "Send"]]
            [:div.already-registered
-            "Thank you for registering!"])]))))
+            [:div "Thank you for registering!"]
+            [:div
+             [:a {:href "#"
+                  :on-click (fn [e]
+                              (.preventDefault e)
+                              (reset! registration-data {}))}
+              "Register another person"]]])]))))

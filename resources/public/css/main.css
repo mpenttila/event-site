@@ -236,6 +236,11 @@ a:focus {
   color: #ffffff;
   font-size: 1.5em;
 }
+.content-section .already-registered a {
+  color: #ffffff;
+  font-size: 0.7em;
+  text-decoration: underline;
+}
 .content-section .registrations {
   width: 100%;
 }
