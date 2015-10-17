@@ -9,8 +9,6 @@
 
 (def cur-scroll-y (reagent/atom 0))
 
-(def offsets (reagent/atom {}))
-
 (def content-ratom (reagent/atom []))
 
 (def content-nodes (reagent/atom {}))
@@ -33,10 +31,7 @@
         (render-components markup)]])
     {:component-did-mount (fn [this]
                             (let [node (reagent/dom-node this)
-                                  top (.-offsetTop node)
-                                  bottom (+ (.-offsetHeight node) top)
                                   id (.-id node)]
-                              (swap! offsets assoc id {:top top :bottom bottom})
                               (swap! content-nodes assoc id node)))}))
 
 (defn handle-link-click [id e]
