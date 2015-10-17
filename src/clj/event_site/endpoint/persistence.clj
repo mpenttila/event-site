@@ -4,19 +4,23 @@
             [compojure.core :refer :all]
             [ring.middleware.transit :refer [wrap-transit-body wrap-transit-response]]
             [monger.query :as q]
-            [postal.core :as postal])
+            [postal.core :as postal]
+            [clojure.string :as string])
   (:import (java.util Date)))
 
 (def collection "registrations")
 
-(defn send-confirmation-email [to-addr email-config]
-  (postal/send-message (assoc email-config :to to-addr)))
+(defn send-confirmation-email [reg-data email-config]
+  (let [mail (-> email-config
+                 (assoc :to (:email reg-data))
+                 (assoc :body (string/replace (:body email-config) "[NAME]" (:name reg-data))))]
+    (postal/send-message mail)))
 
 (defn store-registration [db data email-config]
   (let [data-with-ts (assoc data :created (Date.))]
     (domain/validate data-with-ts)
     (mc/insert db collection data-with-ts)
-    (send-confirmation-email (:email data) email-config)))
+    (send-confirmation-email data email-config)))
 
 (defn get-registrations [db]
   (q/with-collection db collection
