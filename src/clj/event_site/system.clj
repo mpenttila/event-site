@@ -46,5 +46,5 @@
         (component/system-using
          {:http [:app]
           :app  [:resources :persistence]
-          :persistence [:db]
+          :persistence [:db :security]
           :resources [:security]}))))

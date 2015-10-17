@@ -2,17 +2,12 @@
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [reagent.core :as reagent]
             [event-site.domain :as domain]
-            [ajax.core :refer [POST]]))
+            [ajax.core :refer [POST]]
+            [ui.utils :refer [handle-change]]))
 
 (def already-registered? (reagent/atom false))
 
-(defn handle-change [atom]
-  (fn [e]
-    (let [value (.. e -target -value)]
-      (reset! atom value))))
-
 (defn handle-submit [data]
-  (println data)
   (POST "/register"
         {:params data
          :handler #(reset! already-registered? true)}))

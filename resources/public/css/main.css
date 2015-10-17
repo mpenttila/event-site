@@ -178,9 +178,9 @@ a:focus {
 .content-section {
   min-height: 100%;
   width: 100%;
-  background-color: grey;
+  background-color: white;
   overflow: hidden;
-  color: white;
+  color: black;
   background-size: cover;
   padding: 80px 0;
   font-family: 'Patua One', sans-serif;
@@ -235,4 +235,11 @@ a:focus {
   margin-top: 10px;
   color: #ffffff;
   font-size: 1.5em;
+}
+.content-section .registrations {
+  width: 100%;
+}
+.content-section .registrations th {
+  background-color: #707070;
+  font-weight: 400;
 }

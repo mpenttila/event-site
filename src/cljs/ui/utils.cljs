@@ -37,3 +37,8 @@
                             (curve y1 y2 t2)
                             (recur t0' t1' (+ (* (- t1' t0') 0.5) t0'))))
                         (curve y1 y2 t2)))))))
+
+(defn handle-change [atom]
+  (fn [e]
+    (let [value (.. e -target -value)]
+      (reset! atom value))))

@@ -15,7 +15,8 @@
 (def Registration {:name NonEmptyStr
                    :email Email
                    :food s/Str
-                   :other s/Str})
+                   :other s/Str
+                   (s/optional-key :created) s/Inst})
 
 (defn validate [registration-data]
   (s/validate Registration registration-data))

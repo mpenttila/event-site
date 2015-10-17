@@ -32,6 +32,11 @@
                          "public/index.html")]
         (-> (resource-response index-file)
             (content-type "text/html"))))
+    (GET "/admin" request
+      (if (authorized? request)
+        (-> (resource-response "private/secure-index.html")
+            (content-type "text/html"))
+        (redirect "/")))
     (POST "/login" {{password :password} :params}
       (cond-> (redirect "/" :see-other)
               (= common-password password)  (assoc-in [:session :authorized] true)))
