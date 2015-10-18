@@ -21,7 +21,7 @@
                                              :email @email
                                              :food @food
                                              :other @other})
-                           (catch js/Error e
+                           (catch js/Object e
                              false)))]
     (fn []
       (let [already-registered? (not (empty? @registration-data))

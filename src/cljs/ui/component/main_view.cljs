@@ -32,10 +32,8 @@
 
 (defn handle-link-click [id e]
   (.preventDefault e)
-  (let [
-        ;{:keys [top]} (get @offsets id)
-        top (.-offsetTop (get @content-nodes id))
-        scroll-y (.-scrollY js/window)
+  (let [top (.-offsetTop (get @content-nodes id))
+        scroll-y (or (.-scrollY js/window) (.-pageYOffset js/window))
         diff (- top scroll-y)
         duration 1201.0
         epsilon (/ 1000 60 duration 4)

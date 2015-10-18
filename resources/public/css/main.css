@@ -58,6 +58,18 @@
 .register-form .input-fields input {
   margin-bottom: 8px;
 }
+.register-form ::-webkit-input-placeholder {
+  color: #a1a1a1;
+}
+.register-form :-moz-placeholder {
+  color: #a1a1a1;
+}
+.register-form ::-moz-placeholder {
+  color: #a1a1a1;
+}
+.register-form :-ms-input-placeholder {
+  color: #a1a1a1;
+}
 body,
 html,
 #app,
