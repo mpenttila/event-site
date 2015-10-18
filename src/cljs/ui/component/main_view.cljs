@@ -30,6 +30,11 @@
                                   id (.-id node)]
                               (swap! content-nodes assoc id node)))}))
 
+(defn is-old-ie? []
+  (let [agent (.-userAgent js/navigator)
+        version (second (re-find #".*MSIE (\d)\.0.*" agent))]
+    (and version (< version 10))))
+
 (defn handle-link-click [id e]
   (.preventDefault e)
   (let [top (.-offsetTop (get @content-nodes id))
@@ -38,15 +43,17 @@
         duration 1201.0
         epsilon (/ 1000 60 duration 4)
         ease-fn (utils/bezier 0.25 1 0.25 1 epsilon)]
-    (.requestAnimationFrame js/window (fn [start]
-                                        (letfn [(animate-frame [ts] (let [dt (- ts start)
-                                                                          progress (* 1.05 (/ dt duration))
-                                                                          bezier-term (ease-fn progress)
-                                                                          position (+ scroll-y (Math/round (* bezier-term diff)))]
-                                                                      (.scrollTo js/window 0 position)
-                                                                      (when-not (= position top)
-                                                                        (.requestAnimationFrame js/window animate-frame))))]
-                                          (animate-frame start))))))
+    (if (is-old-ie?)
+      (.scrollTo js/window 0 top)
+      (.requestAnimationFrame js/window (fn [start]
+                                          (letfn [(animate-frame [ts] (let [dt (- ts start)
+                                                                            progress (* 1.05 (/ dt duration))
+                                                                            bezier-term (ease-fn progress)
+                                                                            position (+ scroll-y (Math/round (* bezier-term diff)))]
+                                                                        (.scrollTo js/window 0 position)
+                                                                        (when-not (= position top)
+                                                                          (.requestAnimationFrame js/window animate-frame))))]
+                                            (animate-frame start)))))))
 
 (defn link-text [id]
   (apply str (.toUpperCase (first id)) (rest id)))
