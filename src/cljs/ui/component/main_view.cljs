@@ -30,11 +30,6 @@
                                   id (.-id node)]
                               (swap! content-nodes assoc id node)))}))
 
-(defn is-old-ie? []
-  (let [agent (.-userAgent js/navigator)
-        version (second (re-find #".*MSIE (\d)\.0.*" agent))]
-    (and version (< version 10))))
-
 (defn handle-link-click [id e]
   (.preventDefault e)
   (let [top (.-offsetTop (get @content-nodes id))
@@ -43,7 +38,7 @@
         duration 1201.0
         epsilon (/ 1000 60 duration 4)
         ease-fn (utils/bezier 0.25 1 0.25 1 epsilon)]
-    (if (is-old-ie?)
+    (if utils/is-old-ie?
       (.scrollTo js/window 0 top)
       (.requestAnimationFrame js/window (fn [start]
                                           (letfn [(animate-frame [ts] (let [dt (- ts start)
@@ -100,4 +95,4 @@
                     ^{:key id} [content-section page]))]])))))
     {:component-did-mount (fn [_]
                             (events/listen js/window EventType/SCROLL
-                                           (fn [e] (reset! cur-scroll-y (.-scrollY js/window)))))}))
+                                           (fn [e] (reset! cur-scroll-y (or (.-scrollY js/window) (.-pageYOffset js/window))))))}))

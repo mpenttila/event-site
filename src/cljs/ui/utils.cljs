@@ -42,3 +42,8 @@
   (fn [e]
     (let [value (.. e -target -value)]
       (reset! atom value))))
+
+(def is-old-ie?
+  (let [agent (.-userAgent js/navigator)
+        version (second (re-find #".*MSIE (\d)\.0.*" agent))]
+    (and version (< version 10))))

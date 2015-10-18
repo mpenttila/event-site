@@ -4,7 +4,8 @@
             [event-site.domain :as domain]
             [ajax.core :refer [POST GET]]
             [ui.utils :refer [handle-change]]
-            [ui.state :refer [registration-data]]))
+            [ui.state :refer [registration-data]]
+            [ui.utils :as utils]))
 
 (defn handle-submit [data]
   (POST "/register"
@@ -36,9 +37,13 @@
                                                            :food @food
                                                            :other @other}))}
          [:div.input-fields
+          (when utils/is-old-ie? [:div.ie-label "Name"])
           [:input {:placeholder "Name" :value nv :disabled already-registered? :on-change (handle-change name)}]
+          (when utils/is-old-ie? [:div.ie-label "Email"])
           [:input {:placeholder "Email" :value ev :disabled already-registered? :on-change (handle-change email)}]
+          (when utils/is-old-ie? [:div.ie-label "Allergies"])
           [:input {:placeholder "Allergies" :value fv :disabled already-registered? :on-change (handle-change food)}]
+          (when utils/is-old-ie? [:div.ie-label "Other info"])
           [:textarea {:placeholder "Other info" :value ov :disabled already-registered? :on-change (handle-change other)}]]
          (if-not already-registered?
            [:div

@@ -58,6 +58,9 @@
 .register-form .input-fields input {
   margin-bottom: 8px;
 }
+.register-form .ie-label {
+  color: white;
+}
 .register-form ::-webkit-input-placeholder {
   color: #a1a1a1;
 }
