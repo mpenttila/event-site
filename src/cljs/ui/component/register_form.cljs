@@ -35,7 +35,11 @@
                                            (handle-submit {:name @name
                                                            :email @email
                                                            :food @food
-                                                           :other @other}))}
+                                                           :other @other})
+                                           (reset! name "")
+                                           (reset! email "")
+                                           (reset! food "")
+                                           (reset! other ""))}
          [:div.input-fields
           (when utils/is-old-ie? [:div.ie-label "Name"])
           [:input {:placeholder "Name" :value nv :disabled already-registered? :on-change (handle-change name)}]
