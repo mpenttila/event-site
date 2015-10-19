@@ -6,12 +6,7 @@
 (defn unauthorized-response []
   {:status 401
    :headers {"Content-Type" "text/plain; charset=utf-8"}
-   :body "Sisäänkirjautuminen vaaditaan"})
-
-(defn forbidden-response []
-  {:status 403
-   :headers {"Content-Type" "text/plain; charset=utf-8"}
-   :body "Sinulla ei ole tarvittavia käyttöoikeuksia"})
+   :body "Login required"})
 
 (defn authorized? [request]
   (get-in request [:session :authorized]))
@@ -24,16 +19,16 @@
           (assoc response :session (or (:session response) (:session request)))))
       (unauthorized-response))))
 
-(defn resources [{{:keys [common-password]} :security}]
+(defn resources [{{:keys [common-password require-common-password]} :security}]
   (routes
     (GET "/" request
-      (let [index-file (if (authorized? request)
+      (let [index-file (if (or (not require-common-password) (authorized? request))
                          "private/secure-index.html"
                          "public/index.html")]
         (-> (resource-response index-file)
             (content-type "text/html"))))
     (GET "/admin" request
-      (if (authorized? request)
+      (if (or (not require-common-password) (authorized? request))
         (-> (resource-response "private/secure-index.html")
             (content-type "text/html"))
         (redirect "/")))
@@ -41,5 +36,5 @@
       (cond-> (redirect "/" :see-other)
               (= common-password password)  (assoc-in [:session :authorized] true)))
     (route/resources "/" {:root "public"})
-    (-> (route/resources "/" {:root "private"})
-        (wrap-authorization))))
+    (cond-> (route/resources "/" {:root "private"})
+            require-common-password (wrap-authorization))))

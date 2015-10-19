@@ -41,9 +41,9 @@
                       {:status 200
                        :body regs
                        :session (assoc (:session request) :admin-password verified-password)})
-                    {:status 403
+                    {:status 401
                      :headers {"Content-Type" "text/plain; charset=utf-8"}
-                     :body "Sinulla ei ole tarvittavia käyttöoikeuksia"}))
+                     :body "Invalid or missing authorization"}))
                 (GET "/registration-data" {{:keys [registration]} :session}
                   (if registration
                     {:status 200

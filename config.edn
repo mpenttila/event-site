@@ -1,7 +1,8 @@
 {:http {:port 3000}
  :logging {:file "event-site.log"}
  :db {:uri "mongodb://localhost/event-site"}
- :security {:common-password "testi"
+ :security {:require-common-password true
+            :common-password "testi"
             :admin-password "salaisuus"
             :cookie-secret "changeitchangeit"}
  :email {:from "info@domain.local"
