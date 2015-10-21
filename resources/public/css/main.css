@@ -258,8 +258,14 @@ a:focus {
 }
 .content-section .registrations {
   width: 100%;
+  table-layout: fixed;
 }
 .content-section .registrations th {
   background-color: #707070;
   font-weight: 400;
+}
+.content-section .registrations td {
+  font-family: Helvetica, Arial, sans-serif;
+  word-wrap: break-word;
+  font-size: 0.9em;
 }
