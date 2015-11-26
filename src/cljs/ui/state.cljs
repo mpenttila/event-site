@@ -9,6 +9,8 @@
 
 (def registration-data (reagent/atom {}))
 
+(def registration-state (reagent/atom :will-open))
+
 (defn load-content [content-vec]
   (reset! content-ratom content-vec))
 
@@ -22,4 +24,6 @@
 
 (defn load-previous-data []
   (GET "/registration-data"
-       {:handler #(reset! registration-data %)}))
+       {:handler (fn [response]
+                   (reset! registration-data (:data response))
+                   (reset! registration-state (:open response)))}))

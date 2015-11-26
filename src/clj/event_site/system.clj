@@ -43,9 +43,10 @@
          :resources (endpoint-component resources)
          :persistence (endpoint-component persistence-routes)
          :security (:security config)
-         :email (:email config))
+         :email (:email config)
+         :registration (:registration config))
         (component/system-using
          {:http [:app]
           :app  [:resources :persistence]
-          :persistence [:db :security :email]
+          :persistence [:db :security :email :registration]
           :resources [:security]}))))

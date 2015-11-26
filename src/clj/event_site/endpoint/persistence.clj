@@ -6,7 +6,9 @@
             [monger.query :as q]
             [postal.core :as postal]
             [clojure.string :as string])
-  (:import (java.util Date)))
+  (:import (java.util Date)
+           (java.time ZonedDateTime)
+           (java.time.format DateTimeFormatter)))
 
 (def collection "registrations")
 
@@ -32,7 +34,7 @@
     (when (= password admin-password)
       password)))
 
-(defn persistence-routes [{{{db :db} :mongo} :db {:keys [admin-password]} :security email-config :email}]
+(defn persistence-routes [{{{db :db} :mongo} :db {:keys [admin-password]} :security email-config :email registration-config :registration}]
   (routes
     (-> (routes (GET "/registrations" request
                   (if-let [verified-password (verify-password request admin-password)]
@@ -45,11 +47,16 @@
                      :headers {"Content-Type" "text/plain; charset=utf-8"}
                      :body "Invalid or missing authorization"}))
                 (GET "/registration-data" {{:keys [registration]} :session}
-                  (if registration
+                  (let [start-dt (ZonedDateTime/parse (:start registration-config) DateTimeFormatter/ISO_OFFSET_DATE_TIME)
+                        end-dt (ZonedDateTime/parse (:end registration-config) DateTimeFormatter/ISO_OFFSET_DATE_TIME)
+                        now (ZonedDateTime/now)
+                        reg-state (cond
+                                    (.isBefore now start-dt) :will-open
+                                    (.isAfter now end-dt) :has-closed
+                                    :else :open)]
                     {:status 200
-                     :body registration}
-                    {:status 404
-                     :body "No registration data"})))
+                     :body {:data (or registration {})
+                            :open reg-state}})))
         (wrap-transit-response))
     (-> (POST "/register" {:keys [body session]}
           (try

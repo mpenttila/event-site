@@ -7,4 +7,6 @@
             :cookie-secret "changeitchangeit"}
  :email {:from "info@domain.local"
          :subject "Thank you and welcome!"
-         :body "Test."}}
+         :body "Test."}
+ :registration {:start "2015-10-01T09:00:00Z"
+                :end "2015-11-26T19:25:00Z"}}
